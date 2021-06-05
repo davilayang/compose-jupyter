@@ -2,13 +2,35 @@
 
 Start a Jupyter server on Docker
 
-## Access the Jupyter server 
+## Build the image
 
 ```bash
-google-chrome --new-window --app=http://localhost:8888/lab
+docker build -t jupyter --build-arg USER_NAME=$USER .
+```
+
+or 
+
+```bash
+make build
+```
+
+## Start & Access the Jupyter server 
+
+```bash
+docker run -it --rm \
+    --volume $PWD/notebooks:/app/notebooks \
+    --volume $PWD/data:/app/data \
+    --publish 8888:8888 \
+    jupyter 
 google-chrome --incognito --app=http://localhost:8888/lab
 ```
 
+or 
+
+```bash
+make start
+google-chrome --new-window --app=http://localhost:8888/lab
+```
 
 ## Add additional dependencies
 
