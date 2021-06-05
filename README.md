@@ -45,3 +45,7 @@ For example,
 ipython >=7.24.1,<8.0.0
 ```
 
+## Mount with notebooks and data
+
+By default, two local folders at repository root are mounted to the running Jupyter server: `notebooks` and `data`. Both are mounted at root directory `/app` inside the container.
+
