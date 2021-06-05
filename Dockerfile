@@ -20,14 +20,12 @@ USER ${USER_NAME}
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 # install required dependencies
-RUN pip install --user --no-cache-dir --upgrade \
-    "jupyterlab >=3.0.16,<4.0.0" \
-    "jupyterlab-vim >=0.14.2,<1.0.0" \
-    "jupyterlab-spellchecker >=0.6.0,<1.0.0"
-
-# install additional dependencies
 COPY requirements.txt requirements.txt 
 RUN pip install --user --no-cache-dir --requirement "requirements.txt"
+
+# install additional dependencies
+COPY requirements_dev.txt requirements_dev.txt 
+RUN pip install --user --no-cache-dir --requirement "requirements_dev.txt"
 
 # define color theme for dakr mode, currenly: dracula or monokai
 ARG COLOR_THEME=dracula 
