@@ -10,6 +10,7 @@ build:
 # start the jupyter server
 start: 
 	docker run -it --rm \
+	    --name jupyter-on-docker \
 	    --volume $(CURRENT_DIR)/notebooks:/app/notebooks \
 	    --volume $(CURRENT_DIR)/data:/app/data \
 	    --publish 8888:8888 \
@@ -18,8 +19,13 @@ start:
 # start the jupyter server in detached mode
 start-detach: 
 	docker run -it --rm --detach \
+	    --name jupyter-on-docker \
 	    --volume $(CURRENT_DIR)/notebooks:/app/notebooks \
 	    --volume $(CURRENT_DIR)/data:/app/data \
 	    --publish 8888:8888 \
 	    jupyter
+
+# stop the running server
+stop: 
+	docker stop jupyter-on-docker
 
