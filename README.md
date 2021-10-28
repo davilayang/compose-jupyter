@@ -21,7 +21,7 @@ docker run -it --rm \
     --volume $PWD/notebooks:/app/notebooks \
     --volume $PWD/data:/app/data \
     --publish 8888:8888 \
-    jupyter 
+    local/jupyter 
 google-chrome --incognito --app=http://localhost:8888/lab
 ```
 
