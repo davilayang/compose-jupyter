@@ -5,16 +5,16 @@ Start a Jupyter server on Docker
 ## Build the image
 
 ```bash
-docker build -t jupyter --build-arg USER_NAME=$USER .
+docker build -t local/jupyter --build-arg USER_NAME=$USER .
 ```
 
-or 
+or  
 
 ```bash
 make build
 ```
 
-## Start & Access the Jupyter server 
+## Start & Access the Jupyter server
 
 ```bash
 docker run -it --rm \
@@ -25,7 +25,7 @@ docker run -it --rm \
 google-chrome --incognito --app=http://localhost:8888/lab
 ```
 
-or 
+or using _Makefile_ rules
 
 ```bash
 make start
@@ -34,12 +34,7 @@ google-chrome --new-window --app=http://localhost:8888/lab
 
 ## Add additional dependencies
 
-Add new PYPI packages to `requirements.txt` or `requirements_dev.txt`
-
-+ `requirements.txt` for must-have dependencies
-+ `requirements_dev.txt` for additional dependencies on the image
-
-For example, 
+Create a file `requirements.txt` at repository root and add PYPI packages to it line by line, see [official `pip` documentation](https://pip.pypa.io/en/stable/user_guide/#requirements-files). For example:  
 
 ```txt
 ipython >=7.24.1,<8.0.0
@@ -48,4 +43,3 @@ ipython >=7.24.1,<8.0.0
 ## Mount with notebooks and data
 
 By default, two local folders at repository root are mounted to the running Jupyter server: `notebooks` and `data`. Both are mounted at root directory `/app` inside the container.
-

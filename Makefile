@@ -5,7 +5,7 @@ CURRENT_DIR = $(PWD)
 
 # build the jupyter image
 build: 
-	docker build -t jupyter --build-arg USER_NAME=$(USER_NAME) .
+	docker build -t local/jupyter --build-arg USER_NAME=$(USER_NAME) .
 
 # start the jupyter server
 start: 
@@ -14,7 +14,7 @@ start:
 	    --volume $(CURRENT_DIR)/notebooks:/app/notebooks \
 	    --volume $(CURRENT_DIR)/data:/app/data \
 	    --publish 8888:8888 \
-	    jupyter
+	    local/jupyter
 
 # start the jupyter server in detached mode
 start-detach: 
@@ -23,9 +23,8 @@ start-detach:
 	    --volume $(CURRENT_DIR)/notebooks:/app/notebooks \
 	    --volume $(CURRENT_DIR)/data:/app/data \
 	    --publish 8888:8888 \
-	    jupyter
+	    local/jupyter
 
 # stop the running server
 stop: 
 	docker stop jupyter-on-docker
-

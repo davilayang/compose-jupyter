@@ -6,7 +6,7 @@ WORKDIR /app
 ARG USER_NAME
 
 # installations
-RUN apt-get update && curl -fsSL https://deb.nodesource.com/setup_15.x | bash - \
+RUN apt-get update && curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
     && apt-get install -y \
     vim \
     nodejs \
@@ -19,15 +19,18 @@ USER ${USER_NAME}
 # add user bin to PATH
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
-# install required dependencies
+# install must-have dependencies
+RUN pip install --user --no-cache-dir --upgrade \
+    "jupyterlab>=3.0.12,<4.0.0" \
+    "jupyterlab-vim>=0.14.2,<1.0.0" \
+    "numpy >=1.20.3,<2.0.0" \
+    "pandas >=1.2.4,<2.0.0"
+
+# install additional dependencies
 COPY requirements.txt requirements.txt 
 RUN pip install --user --no-cache-dir --requirement "requirements.txt"
 
-# install additional dependencies
-COPY requirements_dev.txt requirements_dev.txt 
-RUN pip install --user --no-cache-dir --requirement "requirements_dev.txt"
-
-# define color theme for dakr mode, currenly: dracula or monokai
+# define color theme for dakr mode, currently support: dracula or monokai
 ARG COLOR_THEME=dracula 
 
 # configure jupyter themes
