@@ -1,6 +1,8 @@
 # Fonts
 
-Fonts should be installed on the host machine to be used by Chrome, not in Docker container.  
+Fonts should be installed on the host machine to be used by Chrome (or any other browsers), not in Docker container.  
+
+Below are some personal preferences. 
 
 ## Fira Code Retina
 

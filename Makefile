@@ -5,7 +5,10 @@ CURRENT_DIR = $(PWD)
 
 # build the jupyter image
 build: 
-	docker build -t local/jupyter --build-arg USER_NAME=$(USER_NAME) .
+	docker build --tag local/jupyter \
+		--build-arg USER_NAME=$(USER_NAME) \
+		--build-arg COLOR_THEME=dracula \
+		.
 
 # start the jupyter server
 start: 

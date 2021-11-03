@@ -1,4 +1,4 @@
-FROM python:3.8-buster
+FROM python:3.8-slim-buster
 
 WORKDIR /app
 
@@ -22,9 +22,7 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 # install must-have dependencies
 RUN pip install --user --no-cache-dir --upgrade \
     "jupyterlab>=3.0.12,<4.0.0" \
-    "jupyterlab-vim>=0.14.2,<1.0.0" \
-    "numpy >=1.20.3,<2.0.0" \
-    "pandas >=1.2.4,<2.0.0"
+    "jupyterlab-vim>=0.14.2,<1.0.0"
 
 # install additional dependencies
 COPY requirements.txt requirements.txt 
@@ -48,7 +46,3 @@ EXPOSE 8888
 
 ENTRYPOINT ["jupyter", "lab"]
 CMD ["--ip=0.0.0.0", "--port=8888", "--no-browser", "--NotebookApp.token="]
-
-# docker build image_jupyter/. -t local-spark-jupyter
-# docker run -it --rm -p 8888:8888 -v $(pwd)/notebooks:/app local-spark-jupyter
-# chrome --new-window --app=http://127.0.0.1:8888/lab
