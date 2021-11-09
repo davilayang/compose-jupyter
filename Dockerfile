@@ -6,10 +6,12 @@ WORKDIR /app
 ARG USER_NAME
 
 # installations
-RUN apt-get update && curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
+RUN apt-get update \
     && apt-get install -y \
+    curl \
     vim \
-    nodejs \
+    && curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 RUN useradd --create-home --shell /bin/bash --uid 1000 ${USER_NAME}
