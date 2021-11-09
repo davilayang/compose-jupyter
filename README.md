@@ -81,4 +81,10 @@ With any other browser, go to http://localhost:8888/lab
 
 ## Notes
 
-...
+Requirements management through `git stash`. 
+
++ `git stash push -m "some-comment"`, to stash changes with a comment
++ `git stash list`, to show all stashes and their number
++ `git stash pop stash@{number}`, to pop the stashed changes
++ then, `make build TAG=some-comment` to build a image
+
