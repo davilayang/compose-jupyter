@@ -23,8 +23,8 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 # install must-have dependencies
 RUN pip install --user --no-cache-dir --upgrade \
-    "jupyterlab>=3.0.12,<4.0.0" \
-    "jupyterlab-vim>=0.14.2,<1.0.0"
+    "jupyterlab>=3.3.2,<4.0.0" \
+    "jupyterlab-vim>=0.15.1,<1.0.0"
 
 # install additional dependencies
 COPY requirements.txt requirements.txt 
