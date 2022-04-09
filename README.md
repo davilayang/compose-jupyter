@@ -15,8 +15,8 @@ To make things simpler, the building command has been added to Makefile as the r
 ```bash
 # build with default values
 make build
-# build by setting image tag to "pandas"
-make build TAG=pandas
+# build by setting image tag to "pandas" and using Python 3.10
+make build TAG=pandas PYTHON=3.10
 ```
 
 ## Start Jupyter Server

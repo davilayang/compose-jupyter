@@ -1,5 +1,6 @@
 # /bin/bash
 
+PYTHON := 3.8
 USER_NAME := $(USER)
 WORKING_DIRECTORY := $(PWD)
 THEME := dracula # jupyter lab color theme 
@@ -8,6 +9,7 @@ TAG := latest # docker image tag
 # build the jupyter image
 build: 
 	docker build --tag local/jupyter:$(TAG) \
+		--build-arg PYTHON_VERSION=$(PYTHON) \
 		--build-arg USER_NAME=$(USER_NAME) \
 		--build-arg COLOR_THEME=$(THEME) \
 		.

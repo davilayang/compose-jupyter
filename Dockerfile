@@ -1,4 +1,5 @@
-FROM python:3.8-slim-buster
+ARG PYTHON_VERSION
+FROM python:${PYTHON_VERSION}-slim-buster
 
 WORKDIR /app
 
@@ -23,7 +24,7 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 # install must-have dependencies
 RUN pip install --user --no-cache-dir --upgrade \
-    "jupyterlab>=3.3.2,<4.0.0" \
+    "jupyterlab>=3.3.3,<4.0.0" \
     "jupyterlab-vim>=0.15.1,<1.0.0"
 
 # install additional dependencies
