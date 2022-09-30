@@ -1,0 +1,53 @@
+version: "3.9"
+x-jupyter-common:
+  &jupyter-common
+  ports:
+    - 8888:8888
+x-jupyter-build-common:
+  &jupyter-build-common
+  context: . # build from Dockerfile
+  tags: 
+    - local/jupyter:latest
+  args: 
+    &jupyter-build-args
+    BASE_IMAGE: python:3.8-slim-buster
+    SERVER_TYPE: basic
+    USER_UID: "${USER_UID:-10001}"
+    USER_NAME: "${USER_NAME:-jupyterUser}"
+    COLOR_THEME: dracula # one of [dracula, monokai]
+    # TODO: get uid and from command 
+
+services:
+  # basic jupyter server
+  basic: 
+    <<: *jupyter-common
+    build: 
+      <<: *jupyter-build-common
+
+  # jupyter server to start pyspark
+  pyspark: 
+    <<: *jupyter-common
+    build: 
+      <<: *jupyter-build-common
+      tags: 
+        - local/jupyter:pyspark
+      args: 
+        <<: *jupyter-build-args
+        SERVER_TYPE: pyspark
+    profiles:
+      - do-not-start
+
+  # jupyter server to start tensorflow
+  tensorflow:
+    <<: *jupyter-common
+    build: 
+      <<: *jupyter-build-common
+      tags: 
+        - local/jupyter:tensorflow
+      args: 
+        <<: *jupyter-build-args
+        BASE_IMAGE: tensorflow/tensorflow:2.10.0-jupyter
+        SERVER_TYPE: tensorflow
+    working_dir: /tf # tensorflow-tutorials
+    profiles:
+      - do-not-start

@@ -2,89 +2,103 @@
 
 Starts a Jupyter Lab Server with Docker
 
-## Build the image
+## Build the `local/jupyter` Images
 
-Images can be built with `docker build` command. Note the Python dependencies should be added to `requirements.txt` before building the image, following the format of [official `pip` documentation](https://pip.pypa.io/en/stable/user_guide/#requirements-files).
+Before building the image, add the required PYPI dependencies in `requirements.txt`. 
 
-To make things simpler, the building command has been added to Makefile as the rule `build`. Currently it supports these named arguments:  
-
-+ `TAG`, for Docker image tag, default to `latest`
-+ `THEME`, for Jupyter Lab dark theme, default to `dracula`
-  + Options are: `dracula` and `monokai`
+Then, use the predefined Make rules to build the Docker images
 
 ```bash
-# build with default values
-make build
-# build by setting image tag to "pandas" and using Python 3.10
-make build TAG=pandas PYTHON=3.10
+make build-basic TAG=pandas 
+# builds a image with tag local/jupyter:pandas
+
+make build-pyspark
+# builds a image with tag local/jupyter:pyspark
+
+make build-tensorflow
+# builds a image with tag local/jupyter:tensorflow
 ```
+
+Additional configurations to images can be set in `docker-compose.yaml`. E.g. different version of Python, color theme for Jupyter ...etc
 
 ## Start Jupyter Server
 
-Containers can be started by `docker run` command or by executing the Makefile rules.  
-
 ### In this repository
 
-Start the server right in this repository, two local directories (`notebooks` and `data`) are mounted to the running container. Data added to `data` local directory will be available at `/app/data/` in the container. 
+Use `docker compose up` to start the service
 
 ```bash
-# make directory
-mkdir notebooks data
-
-# start in attached mode with "pandas" image
-make start TAG=pandas
-## stop by Ctrl-C
-
-# start in detached mode with "latest" image
-make start-detach
-## stop by make stop
+docker compose up
+# build and start with local/jupyter:latest image
 ```
 
 ### In any working directory
 
-Start the server and mount current working directory to container at `/app`, i.e. the root directory of Jupyter Server. Using any of the following approach will do.
+Start Jupyter server and mount current working directory to running container at `/app`, i.e. the root directory of Jupyter Server. Using any of the following approach will do.
 
-+ Using alias, run only `latest` tag image
-
-```bash
-# set alias
-alias jupyterHere='docker run -it --rm -v $PWD:/app -p 8888:8888 local/jupyter'
-## unalias jupyterHere
-
-# run tag "latest" image
-jupyterHere
-```
-
-+ Using function, run image tag by passing as argument, default to `latest`
+1. Add function `jupyterHere`
 
 ```bash
 function jupyterHere () {
-    local image_tag="${1:-latest}" ;
-    docker run -it --rm -v $PWD:/app -p 8888:8888 local/jupyter:$image_tag ;
-}
-## unset -f jupyterHere
 
-# run tag "pandas" image
-jupyterHere pandas 
+    # showh help message
+    if [[ ( $1 == "--help" ) || ( $1 == "-h" ) ]] ; then
+
+        echo "       " 
+        echo "Usage:   jupyterHere  IMAGE-TAG" 
+        echo "       " 
+        echo "Start a Jupyter Server in Current Working Directory."
+        echo "Works with image built by project 'compose-jupyter'." 
+        echo "       " 
+        echo "Examples: " 
+        echo "  - Run 'jupyterHere latest' to start a server with default image"
+        echo "  - Run 'jupyterHere rdflib' to start a server with rdflib image"
+        echo "       " 
+        
+        return 1
+
+    elif [[ ( $# -eq 0 ) ]] ; then
+
+        
+        echo "       " 
+        echo "List all available local/jupyter images on this machine:"
+        echo "       "
+        docker image ls local/jupyter
+
+        echo "       " 
+        echo "Run 'jupyterHere -h' for more information on usage."
+
+    else
+
+        echo "Visit http://127.0.0.1:8888/lab on browser to use Jupyter Lab"
+        local image_tag="${1:-latest}" ; # default to tag "latest"
+
+        docker run -it --rm -v $PWD:/app -p 8888:8888 local/jupyter:$image_tag ;
+
+    fi
+}
 ```
 
-## Access Jupyter Server
-
-With Chrome in headless mode: 
+2. Call function with image tag to start Jupyter server
 
 ```bash
-google-chrome --incognito --app=http://localhost:8888/lab
-google-chrome --new-window --app=http://localhost:8888/lab
+cd /some/dir/
+# change to any directory
+jupyterHere pandas
+# start with the image local/jupyter:pandas
 ```
 
-With any other browser, go to http://localhost:8888/lab
+## Access the Jupyter Server
+
+1. Chrome in headless mode: `google-chrome --incognito --app=http://localhost:8888/lab`
+2. Any browser at `http://localhost:8888/lab`
+3. Colab "Connect to a local runtime": `http://localhost:8888/lab` (notebooks are not saved locally)
 
 ## Notes
 
-Requirements management through `git stash`. 
+Manage `requirements.txt` using `git stash`.  
 
 + `git stash push -m "some-comment"`, to stash changes with a comment
 + `git stash list`, to show all stashes and their number
 + `git stash pop stash@{number}`, to pop the stashed changes
-+ then, `make build TAG=some-comment` to build a image
-
++ then, `make build-basic TAG=<tag-name>` to build a image
