@@ -9,7 +9,7 @@ x-jupyter-build-common:
     BASE_IMAGE: python:3.8-slim-buster
     SERVER_TYPE: basic
     USER_UID: "${USER_UID:-10001}"
-    USER_NAME: "${USER_UID:-jupyterUser}"
+    USER_NAME: "${USER_NAME:-jupyterUser}"
     COLOR_THEME: dracula # one of [dracula, monokai]
     # TODO: get uid and from command 
 
@@ -36,6 +36,8 @@ services:
         SERVER_TYPE: pyspark
     profiles:
       - do-not-start
+    ports:
+      - 8889:8889
 
   # jupyter server to start tensorflow
   tensorflow:
@@ -49,3 +51,5 @@ services:
         SERVER_TYPE: pyspark
     profiles:
       - do-not-start
+    ports:
+      - 8890:8890

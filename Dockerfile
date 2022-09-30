@@ -24,25 +24,29 @@ RUN pip install --user --no-cache-dir --upgrade \
 
 
 # 2. type stage, preprare dependencies #
-## basic branch
+## basic branch ##
 FROM base AS branch-basic
 
 COPY requirements.txt requirements.txt 
 RUN pip install --user --no-cache-dir --requirement "requirements.txt"
 
-## pyspark branch
+## pyspark branch ##
 FROM base AS branch-pyspark
+
+USER root
 
 # TODO: try copy jdk from image
 RUN apt-get update \
     && apt-get install -y openjdk-11-jdk-headless \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt requirements.txt 
-RUN pip install --user --no-cache-dir --requirement "requirements.txt"
+USER ${USER_NAME}
 
+COPY requirements.txt requirements.txt 
+RUN pip install --user --no-cache-dir --requirement "requirements.txt" "pyspark==3.3.0"
+
+## tensorflow branch ##
 FROM base AS branch-tensorflow
-## tensorflow branch
 
 # TODO: do something for tensorflow
 COPY requirements.txt requirements.txt 
@@ -55,11 +59,8 @@ FROM branch-${SERVER_TYPE}
 # "dracula" or "monokai"
 ARG COLOR_THEME=dracula 
 
-# jupyter theme
-COPY ./theme-dark-extension/index-${COLOR_THEME}.css \
-    /home/${USER_NAME}/.local/share/jupyter/lab/themes/@jupyterlab/theme-dark-extension/index.css
-COPY ./theme-light-extension/index.css \
-    /home/${USER_NAME}/.local/share/jupyter/lab/themes/@jupyterlab/theme-light-extension/index.css
+# jupyter dark and light themes
+COPY ./themes /home/${USER_NAME}/.local/share/jupyter/lab/themes/@jupyterlab/
 
 # user prompt
 RUN echo "PS1='\[\e[0;37m\][\w]\\\n\[\e[1;35m\]\u\[\e[1;34m\]@🐳\[\e[1;36m\]\h\[\e[1;34m\] ❯ \[\e[0m\]'" \
@@ -68,11 +69,8 @@ RUN echo "PS1='\[\e[0;37m\][\w]\\\n\[\e[1;35m\]\u\[\e[1;34m\]@🐳\[\e[1;36m\]\h
 EXPOSE 8888
 
 ENTRYPOINT ["jupyter", "lab"]
-CMD ["--ip=0.0.0.0", \
-    "--port=8888", \
-    "--no-browser", \
-    "--ServerApp.token=", \
-    "--ServerApp.allow_origin='https://colab.research.google.com'", \
-    "--ServerApp.port_retries=0"]
+CMD ["--ip=0.0.0.0", "--port=8888", "--no-browser", \
+    "--ServerApp.token=", "--ServerApp.port_retries=0" \
+    "--ServerApp.allow_origin='https://colab.research.google.com'"]
 
 # FIXME: why need g++, that wasnt needed before
