@@ -35,7 +35,6 @@ FROM base AS branch-pyspark
 
 USER root
 
-# TODO: try copy jdk from image
 RUN apt-get update \
     && apt-get install -y openjdk-11-jdk-headless \
     && rm -rf /var/lib/apt/lists/*
@@ -48,7 +47,6 @@ RUN pip install --user --no-cache-dir --requirement "requirements.txt" "pyspark=
 ## tensorflow branch ##
 FROM base AS branch-tensorflow
 
-# TODO: do something for tensorflow
 COPY requirements.txt requirements.txt 
 RUN pip install --user --no-cache-dir --requirement "requirements.txt"
 

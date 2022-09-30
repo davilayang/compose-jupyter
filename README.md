@@ -82,20 +82,17 @@ function jupyterHere () {
 2. Call function with image tag to start Jupyter server
 
 ```bash
+cd /some/dir/
+# change to any directory
 jupyterHere pandas
 # start with the image local/jupyter:pandas
 ```
 
-## Access Jupyter Server
+## Access the Jupyter Server
 
-With Chrome in headless mode: 
-
-```bash
-google-chrome --incognito --app=http://localhost:8888/lab
-google-chrome --new-window --app=http://localhost:8888/lab
-```
-
-With any other browser, go to http://localhost:8888/lab
+1. Chrome in headless mode: `google-chrome --incognito --app=http://localhost:8888/lab`
+2. Any browser at `http://localhost:8888/lab`
+3. Colab "Connect to a local runtime": `http://localhost:8888/lab` (notebooks are not saved locally)
 
 ## Notes
 
