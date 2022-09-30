@@ -1,12 +1,12 @@
 ARG BASE_IMAGE=python:3.8-slim-buster
-# python:3.8-slim-buster, tensorflow/tensorflow:latest-jupyter
 ARG SERVER_TYPE=basic
-# basic, pyspark, tensorflow
+# SERVER_TYPE is one of [basic, pyspark, tensorflow]
+
 
 # 1. base stage, config user and jupyter lab #
 FROM ${BASE_IMAGE} AS base
 
-ARG USER_NAME USER_UID=10001
+ARG USER_NAME USER_UID
 WORKDIR /app
 
 COPY --from=node:14.20.0-buster-slim /usr/local/bin/node /usr/bin/node
@@ -19,8 +19,8 @@ USER ${USER_NAME}
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 RUN pip install --user --no-cache-dir --upgrade \
-    "jupyterlab>=3.4.7,<4.0.0" \
-    "jupyterlab-vim>=0.15.1,<1.0.0"
+    "jupyterlab>=3.4.7,<4.0.0" "jupyterlab-vim>=0.15.1,<1.0.0"
+
 
 # 2. type stage, preprare dependencies #
 ## basic branch
@@ -46,6 +46,7 @@ FROM base AS branch-tensorflow
 # TODO: do something for tensorflow
 COPY requirements.txt requirements.txt 
 RUN pip install --user --no-cache-dir --requirement "requirements.txt"
+
 
 # 3. finalization stage, style configurations #
 FROM branch-${SERVER_TYPE}

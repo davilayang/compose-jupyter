@@ -8,9 +8,9 @@ x-jupyter-build-common:
     &jupyter-build-args
     BASE_IMAGE: python:3.8-slim-buster
     SERVER_TYPE: basic
-    USER_UID: 10001
-    USER_NAME: user
-    COLOR_THEME: dracula # or monokai
+    USER_UID: "${USER_UID:-10001}"
+    USER_NAME: "${USER_UID:-jupyterUser}"
+    COLOR_THEME: dracula # one of [dracula, monokai]
     # TODO: get uid and from command 
 
 # docker compose build basic
