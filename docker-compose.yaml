@@ -15,7 +15,6 @@ x-jupyter-build-common:
     USER_UID: "${USER_UID:-10001}"
     USER_NAME: "${USER_NAME:-jupyterUser}"
     COLOR_THEME: dracula # one of [dracula, monokai]
-    # TODO: get uid and from command 
 
 services:
   # basic jupyter server
