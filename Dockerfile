@@ -56,11 +56,12 @@ RUN pip install --user --no-cache-dir --requirement "requirements.txt"
 # 3. finalization stage, style configurations #
 FROM branch-${SERVER_TYPE} AS final
 
-# "dracula" or "monokai"
-ARG COLOR_THEME=dracula 
-
 # jupyter dark and light themes
-COPY ./themes /home/${USER_NAME}/.local/share/jupyter/lab/themes/@jupyterlab/
+ARG COLOR_THEME=dracula 
+COPY ./themes/theme-dark-extension/index-${COLOR_THEME}.css \
+    /home/${USER_NAME}/.local/share/jupyter/lab/themes/@jupyterlab/theme-dark-extension/index.css
+COPY ./themes/theme-light-extension/index.css \
+    /home/${USER_NAME}/.local/share/jupyter/lab/themes/@jupyterlab/theme-light-extension/index.css
 
 # user prompt
 RUN echo "PS1='\[\e[0;37m\][\w]\\\n\[\e[1;35m\]\u\[\e[1;34m\]@🐳\[\e[1;36m\]\h\[\e[1;34m\] ❯ \[\e[0m\]'" \
