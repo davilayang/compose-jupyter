@@ -1,4 +1,8 @@
 version: "3.9"
+x-jupyter-common:
+  &jupyter-build-common
+  ports:
+    - 8888:8888
 x-jupyter-build-common:
   &jupyter-build-common
   context: . # build from Dockerfile
@@ -20,13 +24,13 @@ x-jupyter-build-common:
 services:
   # basic jupyter server
   basic: 
+    <<: *jupyter-common
     build: 
       <<: *jupyter-build-common
-    ports: 
-      - 8888:8888
 
   # jupyter server to start pyspark
   pyspark: 
+    <<: *jupyter-common
     build: 
       <<: *jupyter-build-common
       tags: 
@@ -36,11 +40,10 @@ services:
         SERVER_TYPE: pyspark
     profiles:
       - do-not-start
-    ports:
-      - 8889:8889
 
   # jupyter server to start tensorflow
   tensorflow:
+    <<: *jupyter-common
     build: 
       <<: *jupyter-build-common
       tags: 
@@ -48,8 +51,7 @@ services:
       args: 
         <<: *jupyter-build-args
         BASE_IMAGE: tensorflow/tensorflow:2.10.0-jupyter
-        SERVER_TYPE: pyspark
+        SERVER_TYPE: tensorflow
+    working_dir: /tf # tensorflow-tutorials
     profiles:
       - do-not-start
-    ports:
-      - 8890:8890

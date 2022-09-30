@@ -54,7 +54,7 @@ RUN pip install --user --no-cache-dir --requirement "requirements.txt"
 
 
 # 3. finalization stage, style configurations #
-FROM branch-${SERVER_TYPE}
+FROM branch-${SERVER_TYPE} AS final
 
 # "dracula" or "monokai"
 ARG COLOR_THEME=dracula 
@@ -66,11 +66,9 @@ COPY ./themes /home/${USER_NAME}/.local/share/jupyter/lab/themes/@jupyterlab/
 RUN echo "PS1='\[\e[0;37m\][\w]\\\n\[\e[1;35m\]\u\[\e[1;34m\]@🐳\[\e[1;36m\]\h\[\e[1;34m\] ❯ \[\e[0m\]'" \
     >> /home/${USER_NAME}/.bashrc
 
-EXPOSE 8888
-
 ENTRYPOINT ["jupyter", "lab"]
 CMD ["--ip=0.0.0.0", "--port=8888", "--no-browser", \
-    "--ServerApp.token=", "--ServerApp.port_retries=0" \
-    "--ServerApp.allow_origin='https://colab.research.google.com'"]
+    "--ServerApp.token=", "--ServerApp.port_retries=0", \
+    "--ServerApp.allow_origin=https://colab.research.google.com"]
 
 # FIXME: why need g++, that wasnt needed before
