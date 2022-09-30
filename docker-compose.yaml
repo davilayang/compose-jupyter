@@ -1,6 +1,6 @@
 version: "3.9"
 x-jupyter-common:
-  &jupyter-build-common
+  &jupyter-common
   ports:
     - 8888:8888
 x-jupyter-build-common:
