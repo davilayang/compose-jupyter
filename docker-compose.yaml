@@ -1,0 +1,51 @@
+version: "3.9"
+x-jupyter-build-common:
+  &jupyter-build-common
+  context: . # build from Dockerfile
+  tags: 
+    - local/jupyter:latest
+  args: 
+    &jupyter-build-args
+    BASE_IMAGE: python:3.8-slim-buster
+    SERVER_TYPE: basic
+    USER_UID: 10001
+    USER_NAME: user
+    COLOR_THEME: dracula # or monokai
+    # TODO: get uid and from command 
+
+# docker compose build basic
+# COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build basic
+# docker compose up basic
+
+services:
+  # basic jupyter server
+  basic: 
+    build: 
+      <<: *jupyter-build-common
+    ports: 
+      - 8888:8888
+
+  # jupyter server to start pyspark
+  pyspark: 
+    build: 
+      <<: *jupyter-build-common
+      tags: 
+        - local/jupyter:pyspark
+      args: 
+        <<: *jupyter-build-args
+        SERVER_TYPE: pyspark
+    profiles:
+      - do-not-start
+
+  # jupyter server to start tensorflow
+  tensorflow:
+    build: 
+      <<: *jupyter-build-common
+      tags: 
+        - local/jupyter:tensorflow
+      args: 
+        <<: *jupyter-build-args
+        BASE_IMAGE: tensorflow/tensorflow:2.10.0-jupyter
+        SERVER_TYPE: pyspark
+    profiles:
+      - do-not-start
