@@ -17,10 +17,6 @@ x-jupyter-build-common:
     COLOR_THEME: dracula # one of [dracula, monokai]
     # TODO: get uid and from command 
 
-# docker compose build basic
-# COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build basic
-# docker compose up basic
-
 services:
   # basic jupyter server
   basic: 

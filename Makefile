@@ -1,37 +1,19 @@
 # /bin/bash
 
-PYTHON := 3.8
 USER_NAME := $(USER)
-WORKING_DIRECTORY := $(PWD)
-THEME := dracula # jupyter lab color theme 
-TAG := latest # docker image tag
+USER_UID := $(shell id -u $(USER))
 
-# build the jupyter image
-build: 
-	docker build --tag local/jupyter:$(TAG) \
-		--build-arg PYTHON_VERSION=$(PYTHON) \
-		--build-arg USER_NAME=$(USER_NAME) \
-		--build-arg COLOR_THEME=$(THEME) \
-		.
+# crate required envs
+env:
+	echo "USER_UID=$(USER_UID) \nUSER_NAME=$(USER_NAME)" > .env
 
-# start the jupyter server
-start: 
-	docker run -it --rm \
-			--name jupyter-on-docker \
-			--volume $(WORKING_DIRECTORY)/notebooks:/app/notebooks \
-			--volume $(WORKING_DIRECTORY)/data:/app/data \
-			--publish 8888:8888 \
-			local/jupyter:$(TAG)
+# build the jupyter images
+build-basic: 
+	docker compose build basic \
+	&& docker tag local/jupyter:latest local/jupyter:$(TAG)
 
-# start the jupyter server in detached mode
-start-detach: 
-	docker run -it --rm --detach \
-			--name jupyter-on-docker \
-			--volume $(WORKING_DIRECTORY)/notebooks:/app/notebooks \
-			--volume $(WORKING_DIRECTORY)/data:/app/data \
-			--publish 8888:8888 \
-			local/jupyter:$(TAG)
+build-pysaprk: 
+	docker compose build pyspark
 
-# stop the running server
-stop: 
-	docker stop jupyter-on-docker
+build-tensorflow: 
+	docker compose build tensorflow
