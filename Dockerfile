@@ -69,5 +69,3 @@ ENTRYPOINT ["jupyter", "lab"]
 CMD ["--ip=0.0.0.0", "--port=8888", "--no-browser", \
     "--ServerApp.token=", "--ServerApp.port_retries=0", \
     "--ServerApp.allow_origin=https://colab.research.google.com"]
-
-# FIXME: why need g++, that wasnt needed before
