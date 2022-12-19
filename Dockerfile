@@ -19,7 +19,7 @@ USER ${USER_NAME}
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 RUN pip install --user --no-cache-dir --upgrade \
-    "jupyterlab>=3.4.7,<4.0.0" "jupyterlab-vim>=0.15.1,<1.0.0" "jupyter_http_over_ws" \
+    "jupyterlab>=3.5.1,<4.0.0" "jupyterlab-vim>=0.15.1,<1.0.0" "jupyter_http_over_ws" \
     && jupyter serverextension enable --py jupyter_http_over_ws
 
 
