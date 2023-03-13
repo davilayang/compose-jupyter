@@ -19,9 +19,7 @@ USER ${USER_NAME}
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 RUN pip install --user --no-cache-dir --upgrade \
-    "jupyterlab>=3.6.1,<4.0.0" "jupyterlab-vim>=0.15.1,<1.0.0" "jupyter_http_over_ws" \
-    && jupyter serverextension enable --py jupyter_http_over_ws
-
+    "jupyterlab>=3.6.1,<4.0.0" "jupyterlab-vim>=0.16.0,<1.0.0"
 
 # 2. type stage, preprare dependencies #
 ## basic branch ##
@@ -59,6 +57,5 @@ RUN echo "PS1='\[\e[0;37m\][\w]\\\n\[\e[1;35m\]\u\[\e[1;34m\]@🐳\[\e[1;36m\]\h
     >> /home/${USER_NAME}/.bashrc
 
 ENTRYPOINT ["jupyter", "lab"]
-CMD ["--ip=0.0.0.0", "--port=8888", "--no-browser", \
-    "--ServerApp.token=", "--ServerApp.port_retries=0", \
-    "--ServerApp.allow_origin=https://colab.research.google.com"]
+CMD ["--ip=0.0.0.0", "--port=8888", "--no-browser"]
+# CMD ["--ip=0.0.0.0", "--port=8888", "--no-browser", "--ServerApp.token=''"]
