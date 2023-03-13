@@ -3,7 +3,7 @@ ARG SERVER_TYPE=basic
 # SERVER_TYPE is one of [basic, pyspark, tensorflow]
 
 
-# 1. base stage, config user and jupyter lab #
+############# 1. base stage, config user and jupyter lab ##############
 FROM ${BASE_IMAGE} AS base
 
 ARG USER_NAME USER_UID
@@ -21,7 +21,8 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 RUN pip install --user --no-cache-dir --upgrade \
     "jupyterlab>=3.6.1,<4.0.0" "jupyterlab-vim>=0.16.0,<1.0.0"
 
-# 2. type stage, preprare dependencies #
+
+################ 2. type stage, preprare dependencies #################
 ## basic branch ##
 FROM base AS branch-basic
 
@@ -49,7 +50,7 @@ COPY requirements.txt requirements.txt
 RUN pip install --user --no-cache-dir --requirement "requirements.txt"
 
 
-# 3. finalization stage, style configurations #
+############ 3. finalization stage, style configurations ##############
 FROM branch-${SERVER_TYPE} AS final
 
 # user prompt
