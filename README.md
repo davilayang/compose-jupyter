@@ -4,22 +4,24 @@ Starts a Jupyter Lab Server with Docker
 
 ## Build the `local/jupyter` Images
 
-Before building the image, add the required PYPI dependencies in `requirements.txt`. 
+Before building, add the required PYPI dependencies to local text file "requirements.txt". Alternatively, create a text file with prefix "req-" or "requirements-" and add the required dependencies.
 
 Then, use the predefined Make rules to build the Docker images
 
 ```bash
-make build-basic TAG=pandas 
-# builds a image with tag local/jupyter:pandas
+make build-basic TAG=pandas  REQ=requirements-colab.txt
+# builds a image with tag local/jupyter:pandas 
+# using pip requirements in "requirements-colab.txt"
 
 make build-pyspark
-# builds a image with tag local/jupyter:pyspark
+# builds a image with tag local/jupyter:pyspark using req
+# using default pip requirements in "requirements.txt"
 
 make build-tensorflow
 # builds a image with tag local/jupyter:tensorflow
 ```
 
-Additional configurations to images can be set in `docker-compose.yaml`. E.g. different version of Python, color theme for Jupyter ...etc
+Additional configurations to images can be set in `docker-compose.yaml`. E.g. different version of Python, server user name ...etc
 
 ## Start Jupyter Server
 

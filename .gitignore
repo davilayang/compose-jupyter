@@ -1,4 +1,6 @@
 # My Files
+req-*.txt
+requirements-*.txt
 *.ttf
 *.zip
 data/*

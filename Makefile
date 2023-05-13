@@ -1,5 +1,6 @@
 # /bin/bash
 
+REQ := requirements.txt
 USER_NAME := $(USER)
 USER_UID := $(shell id -u $(USER))
 
@@ -9,7 +10,7 @@ env:
 
 # build the jupyter images
 build-basic: 
-	docker compose build basic \
+	docker compose build basic --build-arg REQUIREMENTS_TXT=$(REQ) \
 	&& docker tag local/jupyter:latest local/jupyter:$(TAG)
 
 build-pysaprk: 

@@ -21,12 +21,14 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 RUN pip install --user --no-cache-dir --upgrade \
     "jupyterlab>=3.6.3,<4.0.0" "jupyterlab-vim>=0.16.0,<1.0.0"
 
+ARG REQUIREMENTS_TXT
+RUN echo "Build with Pip Requrirements from: \"${REQUIREMENTS_TXT}\""
+COPY $REQUIREMENTS_TXT requirements.txt
 
 ################ 2. type stage, preprare dependencies #################
 ## basic branch ##
 FROM base AS branch-basic
 
-COPY requirements.txt requirements.txt 
 RUN pip install --user --no-cache-dir --requirement "requirements.txt"
 
 ## pyspark branch ##
@@ -40,13 +42,11 @@ RUN apt-get update \
 
 USER ${USER_NAME}
 
-COPY requirements.txt requirements.txt 
 RUN pip install --user --no-cache-dir --requirement "requirements.txt" "pyspark==3.3.0"
 
 ## tensorflow branch ##
 FROM base AS branch-tensorflow
 
-COPY requirements.txt requirements.txt 
 RUN pip install --user --no-cache-dir --requirement "requirements.txt"
 
 
