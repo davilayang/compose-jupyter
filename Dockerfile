@@ -1,9 +1,5 @@
-ARG BASE_IMAGE=python:3.8-slim-buster
-ARG SERVER_TYPE=basic
-# SERVER_TYPE is one of [basic, pyspark, tensorflow]
-
-
 ############# 1. base stage, config user and jupyter lab ##############
+ARG BASE_IMAGE=python:3.10-slim-buster
 FROM ${BASE_IMAGE} AS base
 
 ARG USER_NAME USER_UID
@@ -51,6 +47,9 @@ RUN pip install --user --no-cache-dir --requirement "requirements.txt"
 
 
 ############ 3. finalization stage, style configurations ##############
+ARG SERVER_TYPE=basic
+# SERVER_TYPE is one of [basic, pyspark, tensorflow]
+
 FROM branch-${SERVER_TYPE} AS final
 
 # user prompt
