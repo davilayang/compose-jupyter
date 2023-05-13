@@ -14,7 +14,7 @@ make build-basic TAG=pandas  REQ=requirements-colab.txt
 # using pip requirements in "requirements-colab.txt"
 
 make build-pyspark
-# builds a image with tag local/jupyter:pyspark using req
+# builds a image with tag local/jupyter:pyspark
 # using default pip requirements in "requirements.txt"
 
 make build-tensorflow
@@ -43,18 +43,19 @@ Start Jupyter server and mount current working directory to running container at
 ```bash
 function jupyterHere () {
 
-    # showh help message
+    # show help message
     if [[ ( $1 == "--help" ) || ( $1 == "-h" ) ]] ; then
 
         echo "       " 
-        echo "Usage:   jupyterHere  IMAGE-TAG" 
+        echo "Usage:  "
+        echo "  - \"jupyterHere  <IMAGE-TAG>\""
         echo "       " 
-        echo "Start a Jupyter Server in Current Working Directory."
-        echo "Works with image built by project 'compose-jupyter'." 
+        echo "Start a Jupyter Lab Server in current working directory; using images built by project 'compose-jupyter'." 
+        echo "Current working directory is mounted at \"/app\" in the container. " 
         echo "       " 
         echo "Examples: " 
-        echo "  - Run 'jupyterHere latest' to start a server with default image"
-        echo "  - Run 'jupyterHere rdflib' to start a server with rdflib image"
+        echo "  - Run \"jupyterHere latest\" to start a server with default local/jupyter:latest image at localhost:8888"
+        echo "  - Run \"jupyterHere colab 8890\" to start a server with local/jupyter:colab image at localhost:8890"
         echo "       " 
         
         return 1
@@ -72,10 +73,11 @@ function jupyterHere () {
 
     else
 
-        echo "Visit http://127.0.0.1:8888/lab on browser to use Jupyter Lab"
         local image_tag="${1:-latest}" ; # default to tag "latest"
+        local port="${2:-8888}" ; # default to port "8888"
+        echo "Visit http://127.0.0.1:$port/lab on browser to use Jupyter Lab"
 
-        docker run -it --rm -v $PWD:/app -p 8888:8888 local/jupyter:$image_tag ;
+        docker run -it --rm -v $PWD:/app -p $port:8888 local/jupyter:$image_tag ;
 
     fi
 }
@@ -86,8 +88,8 @@ function jupyterHere () {
 ```bash
 cd /some/dir/
 # change to any directory
-jupyterHere pandas
-# start with the image local/jupyter:pandas
+jupyterHere colab 
+# start with the image local/jupyter:colab at localhost:8888
 ```
 
 ## Access the Jupyter Server
