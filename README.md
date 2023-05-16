@@ -96,13 +96,5 @@ jupyterHere colab
 
 1. Chrome in headless mode: `google-chrome --incognito --app=http://localhost:8888/lab`
 2. Any browser at `http://localhost:8888/lab`
-3. Colab "Connect to a local runtime": `http://localhost:8888/lab` (notebooks are not saved locally)
+3. ~~Colab "Connect to a local runtime": `http://localhost:8888/lab` (notebooks are not saved locally)~~
 
-## Notes
-
-Manage `requirements.txt` using `git stash`.  
-
-+ `git stash push -m "some-comment"`, to stash changes with a comment
-+ `git stash list`, to show all stashes and their number
-+ `git stash pop stash@{number}`, to pop the stashed changes
-+ then, `make build-basic TAG=<tag-name>` to build a image
