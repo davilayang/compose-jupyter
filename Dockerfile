@@ -58,4 +58,4 @@ RUN echo "PS1='\[\e[0;37m\][\w]\\\n\[\e[1;35m\]\u\[\e[1;34m\]@🐳\[\e[1;36m\]\h
 
 ENTRYPOINT ["jupyter", "lab"]
 # CMD ["--ip=0.0.0.0", "--port=8888", "--no-browser"]
-CMD ["--ip=0.0.0.0", "--port=8888", "--no-browser", "--ServerApp.token=''"]
+CMD ["--ip=0.0.0.0", "--port=8888", "--no-browser", "--IdentityProvider.token=''"]
