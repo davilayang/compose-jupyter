@@ -2,6 +2,11 @@
 
 Starts a Jupyter Lab Server with Docker
 
+## Setup Environment Variables
+
+Simply run `make env` to create a `.env` file in local repository.  
+The script gets the NAME and UID of local user, which will be the user when running the container.  
+
 ## Build the `local/jupyter` Images
 
 Before building, add the required PYPI dependencies to local text file "requirements.txt". Alternatively, create a text file with prefix "req-" or "requirements-" and add the required dependencies.

@@ -1,6 +1,7 @@
 # /bin/bash
 
 REQ := requirements.txt
+TAG := latest
 USER_NAME := $(USER)
 USER_UID := $(shell id -u $(USER))
 
