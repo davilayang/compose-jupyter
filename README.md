@@ -91,6 +91,7 @@ function jupyterHere () {
 
     if [[ $# -eq 0 ]]; then
         echo "Missing Required Argument: <IMAGE-TAG>"
+        echo "Alternatively, \"jupyterHere -h\" for help messages " 
         return 1
     fi
     local image_tag="${1:-latest}" ;
