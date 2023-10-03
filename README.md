@@ -48,41 +48,69 @@ Start Jupyter server and mount current working directory to running container at
 ```bash
 function jupyterHere () {
 
-    # show help message
-    if [[ ( $1 == "--help" ) || ( $1 == "-h" ) ]] ; then
-
+    usage_message() {
         echo "       " 
-        echo "Usage:  "
-        echo "  - \"jupyterHere  <IMAGE-TAG>\""
+        echo "Usage: \"jupyterHere [OPTIONS] IMAGE-TAG\""
         echo "       " 
-        echo "Start a Jupyter Lab Server in current working directory; using images built by project 'compose-jupyter'." 
-        echo "Current working directory is mounted at \"/app\" in the container. " 
+        echo "Run a Jupyter Lab Server in Current Working Directory using Docker image named \"local/jupyter\" " 
+        echo "Working Directory is mounted at \"/app\" in the container " 
+        echo "       " 
+        echo "Options: " 
+        echo "  -p      Set the published port number, default to \"8888\" " 
+        echo "  -t      Set the token for server access, disabled by default (no token is needed) " 
         echo "       " 
         echo "Examples: " 
-        echo "  - Run \"jupyterHere latest\" to start a server with default local/jupyter:latest image at localhost:8888"
-        echo "  - Run \"jupyterHere colab 8890\" to start a server with local/jupyter:colab image at localhost:8890"
+        echo "  \"jupyterHere latest\" "
+        echo "      - start a server with local/jupyter:latest image at localhost:8888"
+        echo "  \"jupyterHere -p 8890 -t xyz colab\" "
+        echo "      - start a server with local/jupyter:colab image at localhost:8888 using token \"xyz\" "
         echo "       " 
         
+    }
+
+    local port="8888"
+    local token=""
+
+    local OPTIND p t
+    while getopts "p::t::h" option; do
+        case $option in
+            p)
+                port="$OPTARG" ;;
+            t)
+                token="$OPTARG" ;;
+            h)
+                usage_message
+                return 1 ;;
+            *) 
+                echo "Not implemented at the moment"
+                # TODO: docker image ls local/jupyter
+                return 1 ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [[ $# -eq 0 ]]; then
+        echo "Missing Required Argument: <IMAGE-TAG>"
         return 1
+    fi
+    local image_tag="${1:-latest}" ;
 
-    elif [[ ( $# -eq 0 ) ]] ; then
+    if [[ $token ]] ; then
+    # start jupyter server with the given token
 
-        
-        echo "       " 
-        echo "List all available local/jupyter images on this machine:"
-        echo "       "
-        docker image ls local/jupyter
-
-        echo "       " 
-        echo "Run 'jupyterHere -h' for more information on usage."
+        docker run -ti --rm \
+            --volume $PWD:/app \
+            --publish $port:8888 \
+            local/jupyter:$image_tag \
+            --ip=0.0.0.0 --port=8888 --no-browser --IdentityProvider.token=$token ; 
 
     else
+    # start with command in Dockerfile
 
-        local image_tag="${1:-latest}" ; # default to tag "latest"
-        local port="${2:-8888}" ; # default to port "8888"
-        echo "Visit http://127.0.0.1:$port/lab on browser to use Jupyter Lab"
-
-        docker run -it --rm -v $PWD:/app -p $port:8888 local/jupyter:$image_tag ;
+        docker run -it --rm \
+            --volume $PWD:/app \
+            --publish $port:8888 \
+            local/jupyter:$image_tag ;
 
     fi
 }
@@ -94,6 +122,8 @@ function jupyterHere () {
 cd /some/dir/
 # change to any directory
 jupyterHere colab 
+jupyterHere colab --token
+jupyterHere colab --token --port 8890
 # start with the image local/jupyter:colab at localhost:8888
 ```
 
