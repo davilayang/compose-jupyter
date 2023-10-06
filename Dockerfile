@@ -8,7 +8,9 @@ FROM ${BASE_IMAGE} AS base
 ARG USER_NAME USER_UID
 WORKDIR /app
 
-COPY --from=node:14.20.0-buster-slim /usr/local/bin/node /usr/bin/node
+# get nodejs and npm
+COPY --from=node:20-buster-slim /usr/local/bin /usr/local/bin
+COPY --from=node:20-buster-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
 
 RUN useradd --create-home --uid ${USER_UID} ${USER_NAME} \
     && chown -R ${USER_NAME}:${USER_NAME} /app
