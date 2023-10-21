@@ -120,17 +120,21 @@ function jupyterHere () {
 2. Call function with image tag to start Jupyter server
 
 ```bash
-cd /some/dir/
 # change to any directory
-jupyterHere colab 
-jupyterHere colab --token
-jupyterHere colab --token --port 8890
-# start with the image local/jupyter:colab at localhost:8888
+cd /some/dir/
+
+## start jupyter with local/jupyter:colab image
+jupyterHere colab
+
+## using port 8890
+jupyterHere -p 8890 colab
+
+## using token "abc"
+jupyterHere -t abc -p 8890 colab
 ```
 
 ## Access the Jupyter Server
 
 1. Chrome in headless mode: `google-chrome --incognito --app=http://localhost:8888/lab`
 2. Any browser at `http://localhost:8888/lab`
-3. ~~Colab "Connect to a local runtime": `http://localhost:8888/lab` (notebooks are not saved locally)~~
 
