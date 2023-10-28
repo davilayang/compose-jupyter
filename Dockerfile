@@ -20,7 +20,7 @@ USER ${USER_NAME}
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 RUN pip install --user --no-cache-dir --upgrade \
-    "jupyterlab>=4.0.6,<5.0.0" "jupyterlab-vim>=4.0.3,<5.0.0"
+    "jupyterlab>=4.0.7,<5.0.0" "jupyterlab-vim>=4.1.0,<5.0.0"
 
 ARG REQUIREMENTS_TXT
 RUN echo "Build with Pip Requrirements from: \"${REQUIREMENTS_TXT}\""
