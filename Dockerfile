@@ -12,8 +12,9 @@ WORKDIR /app
 COPY --from=node:20-buster-slim /usr/local/bin /usr/local/bin
 COPY --from=node:20-buster-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
 
-RUN useradd --create-home --uid ${USER_UID} --gid ${GROUP_NAME} ${USER_NAME} \
-    && chown -R ${USER_NAME}:${GROUP_NAME} /app
+RUN useradd --create-home --shell /bin/bash \
+    --uid ${USER_UID} --gid ${GROUP_NAME} ${USER_NAME} \
+    && chown -R ${USER_UID}:${GROUP_NAME} /app
 
 USER ${USER_NAME}
 
