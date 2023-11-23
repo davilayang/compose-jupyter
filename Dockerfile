@@ -5,15 +5,15 @@ ARG SERVER_TYPE=basic
 ARG BASE_IMAGE=python:3.10-slim-buster
 FROM ${BASE_IMAGE} AS base
 
-ARG USER_NAME USER_UID USER_GID
+ARG USER_NAME USER_UID GROUP_NAME
 WORKDIR /app
 
 # get nodejs and npm
 COPY --from=node:20-buster-slim /usr/local/bin /usr/local/bin
 COPY --from=node:20-buster-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
 
-RUN useradd --create-home --uid ${USER_UID} --gid ${USER_GID} ${USER_NAME} \
-    && chown -R ${USER_UID}:${USER_GID} /app
+RUN useradd --create-home --uid ${USER_UID} --gid ${GROUP_NAME} ${USER_NAME} \
+    && chown -R ${USER_NAME}:${GROUP_NAME} /app
 
 USER ${USER_NAME}
 
